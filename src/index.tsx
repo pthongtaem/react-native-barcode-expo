@@ -11,6 +11,7 @@ type props = {
   width?: number;
   height?: number;
   text?: string;
+  textSize?: number;
   textColor?: string;
   lineColor?: string;
   background?: string;
@@ -23,6 +24,7 @@ const Barcode = ({
   width = 2,
   height = 100,
   text,
+  textSize,
   textColor = '#000000',
   lineColor = '#000000',
   background = '#ffffff',
@@ -37,6 +39,7 @@ const Barcode = ({
     width,
     height,
     text,
+    textSize,
     textColor,
     lineColor,
     background,
@@ -154,6 +157,7 @@ const Barcode = ({
             style={{
               color: textColor,
               width: barCodeWidth,
+              fontSize: textSize,
               textAlign: 'center',
             }}
           >
