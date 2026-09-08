@@ -64,6 +64,7 @@ var Barcode = function Barcode(_ref) {
       _ref$height = _ref.height,
       height = _ref$height === void 0 ? 100 : _ref$height,
       text = _ref.text,
+      textSize = _ref.textSize,
       _ref$textColor = _ref.textColor,
       textColor = _ref$textColor === void 0 ? '#000000' : _ref$textColor,
       _ref$lineColor = _ref.lineColor,
@@ -86,6 +87,7 @@ var Barcode = function Barcode(_ref) {
     width: width,
     height: height,
     text: text,
+    textSize: textSize,
     textColor: textColor,
     lineColor: lineColor,
     background: background,
@@ -196,6 +198,7 @@ var Barcode = function Barcode(_ref) {
     style: {
       color: textColor,
       width: barCodeWidth,
+      fontSize: textSize,
       textAlign: 'center'
     }
   }, text)));

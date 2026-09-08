@@ -38,6 +38,7 @@ const Barcode = ({
   width: _width = 2,
   height: _height = 100,
   text,
+  textSize,
   textColor: _textColor = '#000000',
   lineColor: _lineColor = '#000000',
   background: _background = '#ffffff',
@@ -51,6 +52,7 @@ const Barcode = ({
     width: _width,
     height: _height,
     text,
+    textSize,
     textColor: _textColor,
     lineColor: _lineColor,
     background: _background,
@@ -161,6 +163,7 @@ const Barcode = ({
     style: {
       color: _textColor,
       width: barCodeWidth,
+      fontSize: textSize,
       textAlign: 'center'
     }
   }, text)));

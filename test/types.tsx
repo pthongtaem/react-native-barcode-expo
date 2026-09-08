@@ -10,3 +10,11 @@ void customized;
 
 const built = <BuiltBarcode value="Hello World" />;
 void built;
+
+const sized = <Barcode value="Hello" text="Label" textSize={24} />;
+const builtSized = <BuiltBarcode value="Hello" text="Label" textSize={24} />;
+// @ts-expect-error textSize takes a number, not a CSS string.
+const invalidSize = <Barcode value="Hello" textSize="24px" />;
+void sized;
+void builtSized;
+void invalidSize;

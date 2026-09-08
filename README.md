@@ -47,10 +47,19 @@ Only `value` is required. All other props are optional.
 | `width` | `number` | `2` | Width of a single bar, rather than the total barcode width. |
 | `height` | `number` | `100` | Height of the barcode bars. |
 | `text` | `string` | Not displayed | Label below the barcode. Pass `text={value}` to display the encoded value; this does not change the encoded data. |
+| `textSize` | `number` | React Native default | Font size of the label. Has no effect unless `text` is provided. Omitting it preserves the default text size. |
 | `textColor` | `string` | `"#000000"` | Label color. |
 | `lineColor` | `string` | `"#000000"` | Bar color. |
 | `background` | `string` | `"#ffffff"` | Background color. |
 | `onError` | `(error: Error) => void` | Not set | Called for an empty value, an unsupported format, or data invalid for the selected format. Without a handler, these validation errors are thrown. |
+
+To customize the label size:
+
+```jsx
+<Barcode value="Hello World" text="Hello World" textSize={24} />
+```
+
+Changing `textSize` updates the label without changing the encoded barcode.
 
 ## Handling invalid values
 
