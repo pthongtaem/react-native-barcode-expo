@@ -5169,7 +5169,7 @@ react-is@^19.2.3:
   integrity sha512-s5un28nYxKJw5gvUHyW5PCC28CvBqLu9r3cWgzHT4Vo/5fqqkFcdRYsGcKf50WMPpjjFZS5d76fn3YCo2njKwQ==
 
 "react-native-barcode-expo@file:../dist":
-  version "3.0.0"
+  version "3.0.1"
   dependencies:
     jsbarcode "^3.11.5"
 

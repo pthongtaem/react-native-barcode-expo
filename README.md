@@ -1,5 +1,5 @@
 
-# react-native-barcode-builder-expo
+# react-native-barcode-expo
 
 React Native component to generate barcodes. Uses [JsBarcode](https://github.com/lindell/JsBarcode) for encoding of data.
 
