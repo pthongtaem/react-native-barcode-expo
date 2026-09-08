@@ -14,6 +14,16 @@ Install `react-native-barcode-expo`:
 
 #### Step 2
 
+Install the native SVG dependency using the version selected by your Expo SDK:
+
+```sh
+npx expo install react-native-svg
+```
+
+For bare React Native, install `react-native-svg` and run `npx pod-install` for iOS.
+
+#### Step 3
+
 Start using the component
 
 ```javascript
@@ -28,45 +38,114 @@ You can find more info about the supported barcodes in the [JsBarcode README](ht
 
 ## Properties
 
-<table style="width:80%">
-  <tr>
-    <th>Property</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td><code>value</code></td>
-    <td>What the barcode stands for (required).</td>
-  </tr>
-  <tr>
-    <td><code>format</code></td>
-    <td>Which barcode type to use (default: CODE128).</td>
-  </tr>
-  <tr>
-    <td><code>width</code></td>
-    <td>Width of a single bar (default: 2)</td>
-  </tr>
-  <tr>
-    <td><code>height</code></td>
-    <td>Height of the barcode (default: 100)</td>
-  </tr>
-  <tr>
-    <td><code>text</code></td>
-    <td>Override text that is displayed.</td>
-  </tr>
-  <tr>
-    <td><code>textColor</code></td>
-    <td>Color of the text (default: #000000)</td>
-  </tr>
-  <tr>
-    <td><code>lineColor</code></td>
-    <td>Color of the bars (default: #000000)</td>
-  </tr>
-  <tr>
-    <td><code>background</code></td>
-    <td>Background color of the barcode (default: #ffffff)</td>
-  </tr>
-  <tr>
-    <td><code>onError</code></td>
-    <td>Handler for invalid barcode of selected format</td>
-  </tr>
-</table>
+Only `value` is required. All other props are optional.
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | Required | Non-empty data to encode. It must be valid for the selected format. |
+| `format` | `string` | `"CODE128"` | Barcode format supported by JsBarcode, such as `CODE128`, `CODE39`, or `EAN13`. |
+| `width` | `number` | `2` | Width of a single bar, rather than the total barcode width. |
+| `height` | `number` | `100` | Height of the barcode bars. |
+| `text` | `string` | Not displayed | Label below the barcode. Pass `text={value}` to display the encoded value; this does not change the encoded data. |
+| `textColor` | `string` | `"#000000"` | Label color. |
+| `lineColor` | `string` | `"#000000"` | Bar color. |
+| `background` | `string` | `"#ffffff"` | Background color. |
+| `onError` | `(error: Error) => void` | Not set | Called for an empty value, an unsupported format, or data invalid for the selected format. Without a handler, these validation errors are thrown. |
+
+## Handling invalid values
+
+For example, `EAN13` requires valid numeric data, so `ABC` triggers `onError`. Handle the error and show a message instead of leaving a barcode on screen:
+
+```jsx
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
+import Barcode from 'react-native-barcode-expo';
+
+export default function BarcodeExample() {
+  const [error, setError] = useState(null);
+
+  return (
+    <View>
+      {error ? (
+        <Text>{error}</Text>
+      ) : (
+        <Barcode
+          value="ABC"
+          format="EAN13"
+          onError={(error) => setError(error.message)}
+        />
+      )}
+    </View>
+  );
+}
+```
+
+If your UI lets users correct the input, clear the error when they submit a new value so the barcode can mount again.
+
+## Upgrading from 2.x to 3.0.0
+
+Version 3 moves `react-native-svg` from a fixed dependency to a peer dependency. Install it explicitly in your app so its JavaScript and native versions match your Expo SDK:
+
+```sh
+npm install react-native-barcode-expo@^3.0.0
+npx expo install react-native-svg
+npx expo install --check
+```
+
+For bare React Native, install a `react-native-svg` version compatible with your React Native version, run `npx pod-install` for iOS, and rebuild the native app. If you use an Expo development build, rebuild it after changing the native SVG dependency.
+
+The component import and props remain the same. Version 3 accepts React 18 or 19 and lets the app choose React Native and SVG versions within the declared peer ranges. The example and simulator verification below cover SDK 57; other SDK combinations have not been runtime-tested in this release.
+
+
+## Expo compatibility and local development
+
+The example targets [Expo SDK 57](https://expo.dev/changelog/sdk-57), with React 19.2.3, React Native 0.86.3, and react-native-svg 15.15.4. React, React Native, and SVG are peer dependencies so the consuming app controls their versions. Always use `npx expo install react-native-svg` to select the native version compatible with your SDK; the peer range alone does not guarantee that every combination is compatible.
+
+Use Node.js 22.13 or newer and Yarn 1.22.19. From the repository root:
+
+```sh
+yarn install
+yarn typecheck
+yarn build
+cd example-expo
+yarn install
+npx expo install --check
+yarn test
+yarn start
+```
+
+The example installs the package from the built `dist` directory (`file:../dist`). The build generates its package manifest so the example consumes the compiled library without copying the root development dependencies. After changing the library, rebuild it and run `yarn install --force` in the example to refresh the local package copy.
+
+### Run on iOS Simulator
+
+Install Xcode and an iOS Simulator runtime, then complete the build and installation steps above. From `example-expo`, run:
+
+```sh
+yarn ios
+```
+
+Allow Expo CLI to install or update Expo Go to the version recommended for SDK 57. When the app opens, it displays a barcode labeled `Hello`. Tap **Press me** to change both the barcode and its label to `World`.
+
+If Expo Go reports **Could not connect to the server** when using localhost, Metro may be listening on IPv6 (`::1`) while Expo Go connects to IPv4 (`127.0.0.1`). Stop Metro with Ctrl+C and restart with:
+
+```sh
+NODE_OPTIONS=--dns-result-order=ipv4first npx expo start --ios --localhost --port 8081
+```
+
+This command was used for the simulator test below. Stop Metro with Ctrl+C when finished, and quit Simulator separately.
+
+### Verification
+
+Verified locally on September 8, 2026:
+
+| Check | Result |
+| --- | --- |
+| `yarn typecheck` | Passed for source and built declarations |
+| `yarn build` | Passed |
+| `yarn test` in `example-expo` | Passed: barcode renders and changes after pressing the button |
+| `npx expo install --check` | Dependencies matched SDK 57 |
+| `npx expo-doctor@latest` | 21/21 checks passed |
+| `npx expo export --platform all` | iOS, Android, and web bundles generated successfully |
+| iPhone 17 Simulator, iOS 26.4, Expo Go 57.0.9 | `Hello` rendered; pressing the button changed the label to `World` and updated the barcode; no runtime error observed during this flow |
+
+Android and web were verified by bundling only. Physical devices were not tested. The existing `yarn lint` command fails because its ESLint configuration does not select any files to lint.

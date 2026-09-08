@@ -7,13 +7,13 @@ import ErrorBoundary from './ErrorBoundary';
 
 type props = {
   value: string;
-  format: string;
-  width: number;
-  height: number;
+  format?: string;
+  width?: number;
+  height?: number;
   text?: string;
-  textColor: string;
-  lineColor: string;
-  background: string;
+  textColor?: string;
+  lineColor?: string;
+  background?: string;
   onError?: (error: Error) => any;
 };
 
