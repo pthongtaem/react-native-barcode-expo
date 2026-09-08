@@ -5,9 +5,31 @@ import Svg, { Path } from 'react-native-svg';
 
 import ErrorBoundary from './ErrorBoundary';
 
+export type BarcodeFormat =
+  | 'CODE128'
+  | 'CODE128A'
+  | 'CODE128B'
+  | 'CODE128C'
+  | 'CODE39'
+  | 'EAN13'
+  | 'EAN8'
+  | 'EAN5'
+  | 'EAN2'
+  | 'UPC'
+  | 'UPCE'
+  | 'ITF'
+  | 'ITF14'
+  | 'MSI'
+  | 'MSI10'
+  | 'MSI11'
+  | 'MSI1010'
+  | 'MSI1110'
+  | 'pharmacode'
+  | 'codabar';
+
 type BarcodeProps = {
   value: string;
-  format?: string;
+  format?: BarcodeFormat;
   width?: number;
   height?: number;
   text?: string;
@@ -24,7 +46,7 @@ type BarcodeEncoding = {
 
 type BarcodeEncoder = {
   new (text: string, options: BarcodeProps): {
-    encode: () => BarcodeEncoding;
+    encode: () => BarcodeEncoding | BarcodeEncoding[];
     valid: () => boolean;
   };
 };
@@ -145,13 +167,11 @@ const Barcode = ({
       throw new Error('Invalid barcode for selected format.');
     }
 
-    // Make a request for the binary data (and other infromation) that should be rendered
-    // encoded stucture is {
-    //  text: 'xxxxx',
-    //  data: '110100100001....'
-    // }
+    // EAN/UPC encoders return ordered sections (guards and digit groups).
+    // Our renderer uses uniform bar heights and a separate React Native label.
     const encoded = encoder.encode();
-    return encoded;
+    const sections = Array.isArray(encoded) ? encoded : [encoded];
+    return { data: sections.map(section => section.data).join('') };
   };
 
   const backgroundStyle = {
