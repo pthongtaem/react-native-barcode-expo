@@ -45,3 +45,16 @@ it('lets users change and reset the barcode label size', async () => {
   }
   await act(async () => tree.unmount());
 });
+
+it('shows the EAN13 example and can return to CODE128', async () => {
+  let tree;
+  await act(async () => { tree = renderer.create(<App />); });
+  await act(async () => tree.root.findByProps({ title: 'Show EAN13' }).props.onPress());
+  expect(tree.root.findByType(Barcode).props).toMatchObject({
+    format: 'EAN13', value: '5901234123457', text: '5901234123457',
+  });
+  expect(tree.root.findByType(Path).props.d).toMatch(/^M/);
+  await act(async () => tree.root.findByProps({ title: 'Press me' }).props.onPress());
+  expect(tree.root.findByType(Barcode).props).toMatchObject({ format: 'CODE128', value: 'World' });
+  await act(async () => tree.unmount());
+});

@@ -61,6 +61,23 @@ To customize the label size:
 
 Changing `textSize` updates the label without changing the encoded barcode.
 
+## EAN-13
+
+Use `format="EAN13"` (without a hyphen) and numeric data. JsBarcode accepts 12 digits and calculates the final checksum digit, or 13 digits with a valid checksum. `Hello World` is not valid EAN-13 data.
+
+```jsx
+<Barcode
+  value="5901234123457"
+  format="EAN13"
+  text="5901234123457"
+  onError={(error) => console.warn(error.message)}
+/>
+```
+
+`value="590123412345"` produces the same bars because its checksum is `7`. The optional `text` label is displayed exactly as supplied; it is not automatically updated with the checksum.
+
+EAN/UPC sections are combined into one barcode with uniform bar heights; labels use the same `text` and `textSize` props as other formats. No `flat` prop is needed or supported by this component.
+
 ## Handling invalid values
 
 For example, `EAN13` requires valid numeric data, so `ABC` triggers `onError`. Handle the error and show a message instead of leaving a barcode on screen:
@@ -134,7 +151,7 @@ Install Xcode and an iOS Simulator runtime, then complete the build and installa
 yarn ios
 ```
 
-Allow Expo CLI to install or update Expo Go to the version recommended for SDK 57. When the app opens, it displays a barcode labeled `Hello`. Tap **Press me** to change both the barcode and its label to `World`. Use **Text size 24**, **Text size 32**, and **Default text size** to resize the label and restore its original size. The bars stay unchanged when only the text size changes.
+Allow Expo CLI to install or update Expo Go to the version recommended for SDK 57. When the app opens, it displays a barcode labeled `Hello`. Tap **Press me** to change both the barcode and its label to `World`. Tap **Show EAN13** to display `5901234123457`, or **Press me** to return to CODE128. Use **Text size 24**, **Text size 32**, and **Default text size** to resize the label and restore its original size. The bars stay unchanged when only the text size changes.
 
 If Expo Go reports **Could not connect to the server** when using localhost, Metro may be listening on IPv6 (`::1`) while Expo Go connects to IPv4 (`127.0.0.1`). Stop Metro with Ctrl+C and restart with:
 
@@ -153,10 +170,10 @@ Verified locally on September 8, 2026:
 | `yarn lint` | Passed: source, type fixtures, build scripts, and example app/tests |
 | `yarn typecheck` | Passed for source and built declarations |
 | `yarn build` | Passed |
-| `yarn test` in `example-expo` | Passed: 4 tests covering barcode updates, label sizing/reset, and no label without `text` |
+| `yarn test` in `example-expo` | Passed: 12 tests covering EAN13 binary output and checksum validation, EAN8/UPC rendering, format switching, barcode updates, and label sizing |
 | `npx expo install --check` | Dependencies matched SDK 57 |
 | `npx expo-doctor@latest` | 21/21 checks passed |
 | `npx expo export --platform all` | iOS, Android, and web bundles generated successfully |
-| iPhone 17 Simulator, iOS 26.4, Expo Go 57.0.9 | `Hello` rendered; text size changed Default → 24 → 32 → Default while the bars stayed unchanged; pressing **Press me** changed the label and bars to `World`; no runtime error observed |
+| iPhone 17 Simulator, iOS 26.4, Expo Go 57.0.9 | `Hello` rendered; text size changed Default → 24 → 32 → Default while the bars stayed unchanged; EAN13 `5901234123457` displayed and switched back to CODE128 with **Press me**; no runtime error observed |
 
 Android and web were verified by bundling only. Physical devices were not tested.

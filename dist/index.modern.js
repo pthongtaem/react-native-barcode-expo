@@ -137,15 +137,15 @@ const Barcode = ({
       }
 
       throw new Error('Invalid barcode for selected format.');
-    } // Make a request for the binary data (and other infromation) that should be rendered
-    // encoded stucture is {
-    //  text: 'xxxxx',
-    //  data: '110100100001....'
-    // }
+    } // EAN/UPC encoders return ordered sections (guards and digit groups).
+    // Our renderer uses uniform bar heights and a separate React Native label.
 
 
     const encoded = encoder.encode();
-    return encoded;
+    const sections = Array.isArray(encoded) ? encoded : [encoded];
+    return {
+      data: sections.map(section => section.data).join('')
+    };
   };
 
   const backgroundStyle = {
