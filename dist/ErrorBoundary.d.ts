@@ -1,14 +1,14 @@
 import React from 'react';
 declare class ErrorBoundary extends React.Component<{
-    children: any;
+    children: React.ReactNode;
 }, {
     hasError: boolean;
 }> {
     constructor(props: any);
-    static getDerivedStateFromError(error: any): {
+    static getDerivedStateFromError(): {
         hasError: boolean;
     };
-    componentDidCatch(error: any, errorInfo: any): void;
-    render(): any;
+    componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void;
+    render(): string | number | bigint | boolean | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode>> | React.JSX.Element;
 }
 export default ErrorBoundary;

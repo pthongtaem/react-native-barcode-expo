@@ -13,7 +13,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "node scripts/clean-dist.cjs && microbundle --jsx React.createElement --no-compress && node scripts/prepare-dist.cjs",
-    "lint": "eslint ./",
+    "lint": "eslint src test scripts example-expo",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
@@ -33,13 +33,15 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.0",
-    "babel-eslint": "^10.0.3",
-    "eslint": "^6.8.0",
-    "eslint-plugin-react": "^7.17.0",
+    "@eslint/js": "^9.39.0",
+    "eslint": "^9.39.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^15.15.0",
     "microbundle": "^0.15.1",
     "react": "19.2.3",
     "react-native": "0.86.3",
     "typescript": "~5.9.2",
+    "typescript-eslint": "^8.70.0",
     "react-native-svg": "15.15.4"
   },
   "packageManager": "yarn@1.22.19",

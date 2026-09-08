@@ -11,7 +11,7 @@ class ErrorBoundary extends React.Component {
     };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError() {
     return {
       hasError: true
     };
@@ -46,7 +46,7 @@ const Barcode = ({
 }) => {
   const [bars, setBars] = useState([]);
   const [barCodeWidth, setBarCodeWidth] = useState(0);
-  const props = {
+  const barcodeProps = {
     value,
     format: _format,
     width: _width,
@@ -64,10 +64,10 @@ const Barcode = ({
 
   const update = () => {
     const encoder = barcodes[_format];
-    const encoded = encode(value, encoder, props);
+    const encoded = encode(value, encoder, barcodeProps);
 
     if (encoded) {
-      setBars(drawSvgBarCode(encoded, props));
+      setBars(drawSvgBarCode(encoded, barcodeProps));
       setBarCodeWidth(encoded.data.length * _width);
     }
   };
@@ -78,7 +78,7 @@ const Barcode = ({
     const binary = encoding.data;
     let barWidth = 0;
     let x = 0;
-    let yFrom = 0;
+    const yFrom = 0;
 
     for (let b = 0; b < binary.length; b++) {
       x = b * options.width;
@@ -119,7 +119,7 @@ const Barcode = ({
 
     try {
       encoder = new Encoder(text, options);
-    } catch (error) {
+    } catch (_unused) {
       // If the encoder could not be instantiated, throw error.
       if (options.onError) {
         options.onError(new Error('Invalid barcode format.'));

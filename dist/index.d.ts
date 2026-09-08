@@ -1,5 +1,5 @@
 import React from 'react';
-type props = {
+type BarcodeProps = {
     value: string;
     format?: string;
     width?: number;
@@ -9,7 +9,7 @@ type props = {
     textColor?: string;
     lineColor?: string;
     background?: string;
-    onError?: (error: Error) => any;
+    onError?: (error: Error) => void;
 };
-declare const Barcode: ({ value, format, width, height, text, textSize, textColor, lineColor, background, onError, }: props) => React.JSX.Element;
+declare const Barcode: ({ value, format, width, height, text, textSize, textColor, lineColor, background, onError, }: BarcodeProps) => React.JSX.Element;
 export default Barcode;

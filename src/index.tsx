@@ -5,7 +5,7 @@ import Svg, { Path } from 'react-native-svg';
 
 import ErrorBoundary from './ErrorBoundary';
 
-type props = {
+type BarcodeProps = {
   value: string;
   format?: string;
   width?: number;
@@ -15,7 +15,18 @@ type props = {
   textColor?: string;
   lineColor?: string;
   background?: string;
-  onError?: (error: Error) => any;
+  onError?: (error: Error) => void;
+};
+
+type BarcodeEncoding = {
+  data: string;
+};
+
+type BarcodeEncoder = {
+  new (text: string, options: BarcodeProps): {
+    encode: () => BarcodeEncoding;
+    valid: () => boolean;
+  };
 };
 
 const Barcode = ({
@@ -29,11 +40,11 @@ const Barcode = ({
   lineColor = '#000000',
   background = '#ffffff',
   onError,
-}: props) => {
-  const [bars, setBars] = useState([]);
+}: BarcodeProps) => {
+  const [bars, setBars] = useState<string[]>([]);
   const [barCodeWidth, setBarCodeWidth] = useState(0);
 
-  const props = {
+  const barcodeProps = {
     value,
     format,
     width,
@@ -52,22 +63,22 @@ const Barcode = ({
 
   const update = () => {
     const encoder = barcodes[format];
-    const encoded = encode(value, encoder, props);
+    const encoded = encode(value, encoder, barcodeProps);
 
     if (encoded) {
-      setBars(drawSvgBarCode(encoded, props));
+      setBars(drawSvgBarCode(encoded, barcodeProps));
       setBarCodeWidth(encoded.data.length * width);
     }
   };
 
-  const drawSvgBarCode = (encoding, options: props) => {
-    const rects = [];
+  const drawSvgBarCode = (encoding: BarcodeEncoding, options: BarcodeProps) => {
+    const rects: string[] = [];
     // binary data of barcode
     const binary = encoding.data;
 
     let barWidth = 0;
     let x = 0;
-    let yFrom = 0;
+    const yFrom = 0;
 
     for (let b = 0; b < binary.length; b++) {
       x = b * options.width;
@@ -97,12 +108,12 @@ const Barcode = ({
     return rects;
   };
 
-  const drawRect = (x, y, width, height) => {
+  const drawRect = (x: number, y: number, width: number, height: number) => {
     return `M${x},${y}h${width}v${height}h-${width}z`;
   };
 
   // encode() handles the Encoder call and builds the binary string to be rendered
-  const encode = (text: string, Encoder: any, options: props) => {
+  const encode = (text: string, Encoder: BarcodeEncoder, options: BarcodeProps) => {
     // If text is not a non-empty string, throw error.
     if (typeof text !== 'string' || text.length === 0) {
       if (options.onError) {
@@ -116,7 +127,7 @@ const Barcode = ({
 
     try {
       encoder = new Encoder(text, options);
-    } catch (error) {
+    } catch {
       // If the encoder could not be instantiated, throw error.
       if (options.onError) {
         options.onError(new Error('Invalid barcode format.'));

@@ -114,6 +114,7 @@ Use Node.js 22.13 or newer and Yarn 1.22.19. From the repository root:
 
 ```sh
 yarn install
+yarn lint
 yarn typecheck
 yarn build
 cd example-expo
@@ -133,7 +134,7 @@ Install Xcode and an iOS Simulator runtime, then complete the build and installa
 yarn ios
 ```
 
-Allow Expo CLI to install or update Expo Go to the version recommended for SDK 57. When the app opens, it displays a barcode labeled `Hello`. Tap **Press me** to change both the barcode and its label to `World`.
+Allow Expo CLI to install or update Expo Go to the version recommended for SDK 57. When the app opens, it displays a barcode labeled `Hello`. Tap **Press me** to change both the barcode and its label to `World`. Use **Text size 24**, **Text size 32**, and **Default text size** to resize the label and restore its original size. The bars stay unchanged when only the text size changes.
 
 If Expo Go reports **Could not connect to the server** when using localhost, Metro may be listening on IPv6 (`::1`) while Expo Go connects to IPv4 (`127.0.0.1`). Stop Metro with Ctrl+C and restart with:
 
@@ -149,12 +150,13 @@ Verified locally on September 8, 2026:
 
 | Check | Result |
 | --- | --- |
+| `yarn lint` | Passed: source, type fixtures, build scripts, and example app/tests |
 | `yarn typecheck` | Passed for source and built declarations |
 | `yarn build` | Passed |
-| `yarn test` in `example-expo` | Passed: barcode renders and changes after pressing the button |
+| `yarn test` in `example-expo` | Passed: 4 tests covering barcode updates, label sizing/reset, and no label without `text` |
 | `npx expo install --check` | Dependencies matched SDK 57 |
 | `npx expo-doctor@latest` | 21/21 checks passed |
 | `npx expo export --platform all` | iOS, Android, and web bundles generated successfully |
-| iPhone 17 Simulator, iOS 26.4, Expo Go 57.0.9 | `Hello` rendered; pressing the button changed the label to `World` and updated the barcode; no runtime error observed during this flow |
+| iPhone 17 Simulator, iOS 26.4, Expo Go 57.0.9 | `Hello` rendered; text size changed Default → 24 → 32 → Default while the bars stayed unchanged; pressing **Press me** changed the label and bars to `World`; no runtime error observed |
 
-Android and web were verified by bundling only. Physical devices were not tested. The existing `yarn lint` command fails because its ESLint configuration does not select any files to lint.
+Android and web were verified by bundling only. Physical devices were not tested.

@@ -11,13 +11,17 @@ import Barcode from 'react-native-barcode-expo';
 
 const Example = () => {
   const [code, setCode] = useState('Hello');
-
+  const [textSize, setTextSize] = useState(undefined);
 
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>React Native Barcode Builder</Text>
-      <Barcode value={code} text={code} />
+      <Barcode value={code} text={code} textSize={textSize} />
       <Button title="Press me" onPress={() => setCode('World')} />
+      <Text style={styles.sizeLabel}>Text size: {textSize ?? 'Default'}</Text>
+      <Button title="Text size 24" onPress={() => setTextSize(24)} />
+      <Button title="Text size 32" onPress={() => setTextSize(32)} />
+      <Button title="Default text size" onPress={() => setTextSize(undefined)} />
     </View>
   );
 };
@@ -36,10 +40,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  sizeLabel: {
+    marginTop: 16,
+    marginBottom: 8,
   },
 });
 
