@@ -43,7 +43,7 @@ Only `value` is required. All other props are optional.
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | `value` | `string` | Required | Non-empty data to encode. It must be valid for the selected format. |
-| `format` | `string` | `"CODE128"` | Barcode format supported by JsBarcode, such as `CODE128`, `CODE39`, or `EAN13`. |
+| `format` | `BarcodeFormat` | `"CODE128"` | Barcode format supported by JsBarcode, such as `CODE128`, `CODE39`, or `EAN13`. |
 | `width` | `number` | `2` | Width of a single bar, rather than the total barcode width. |
 | `height` | `number` | `100` | Height of the barcode bars. |
 | `text` | `string` | Not displayed | Label below the barcode. Pass `text={value}` to display the encoded value; this does not change the encoded data. |
@@ -60,6 +60,30 @@ To customize the label size:
 ```
 
 Changing `textSize` updates the label without changing the encoded barcode.
+
+## TypeScript formats
+
+The `format` prop uses the exported `BarcodeFormat` union, so your editor can suggest valid names and TypeScript catches misspellings such as `"EAN-13"`:
+
+```tsx
+import Barcode, { type BarcodeFormat } from 'react-native-barcode-expo';
+
+const format: BarcodeFormat = 'EAN13';
+
+<Barcode value="5901234123457" format={format} />;
+```
+
+Supported names are case-sensitive:
+
+| Family | Formats |
+| --- | --- |
+| Code 128 / Code 39 | `CODE128`, `CODE128A`, `CODE128B`, `CODE128C`, `CODE39` |
+| EAN / UPC | `EAN13`, `EAN8`, `EAN5`, `EAN2`, `UPC`, `UPCE` |
+| Interleaved 2 of 5 | `ITF`, `ITF14` |
+| MSI | `MSI`, `MSI10`, `MSI11`, `MSI1010`, `MSI1110` |
+| Other | `pharmacode`, `codabar` |
+
+When upgrading existing TypeScript code, annotate format variables or state with `BarcodeFormat` instead of `string`. Validate external strings before treating them as a `BarcodeFormat`; a type assertion does not validate API data. JavaScript callers still receive runtime validation through `onError`, and each format still requires suitable barcode data.
 
 ## EAN-13
 
