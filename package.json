@@ -12,7 +12,7 @@
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "microbundle --jsx React.createElement --no-compress && node scripts/prepare-dist.cjs",
+    "build": "node scripts/clean-dist.cjs && microbundle --jsx React.createElement --no-compress && node scripts/prepare-dist.cjs",
     "lint": "eslint ./",
     "typecheck": "tsc --noEmit"
   },
