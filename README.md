@@ -187,6 +187,10 @@ This command was used for the simulator test below. Stop Metro with Ctrl+C when 
 
 ### Package and release checks
 
+The library is built with React Native Builder Bob. `dist/commonjs` contains CommonJS output, `dist/module` contains ESM output, and `dist/typescript` contains declarations for both module systems. The small `dist/index.cjs` adapter preserves the existing direct `require('react-native-barcode-expo')` component export. Metro can still consume `src/index.tsx` through the `react-native` entry.
+
+Use the package name when importing; generated paths have changed from the old Microbundle layout. The unused UMD and separate modern bundles are no longer generated. `dist/package.json` is generated for the example's `file:../dist` dependency; npm releases are packed from the repository root.
+
 Install the root and `example-expo` dependencies using the development steps above, then run from the repository root:
 
 ```sh
@@ -196,6 +200,8 @@ npm run release:check
 This runs lint, packs and installs the actual `.tgz` in a temporary consumer, runs the existing barcode tests against its CommonJS, ESM, and React Native entry points, checks its published TypeScript declarations, and typechecks the repository. The temporary consumer reuses the example's installed peer dependencies and test tools; the library and its production dependencies are installed through npm. This is a package smoke test, not a native device test. Registry access is required, and temporary files are removed when the command finishes.
 
 Use `npm run test:package` to run only the package checks. The `prepack` lifecycle runs `npm run build` automatically before `npm pack` and `npm publish`, so packaging rebuilds `dist` from source. Build output remains committed to Git; review and commit any generated changes before releasing.
+
+Run `yarn audit` at the root to check the library's dependency lockfile, including build tools. The example has its own lockfile and can be audited separately from `example-expo`. An audit result reflects known advisories at the time of the check, not a guarantee of security.
 
 For a release, update the version first, run `npm run release:check`, refresh the example's local package with `yarn install --force` in `example-expo`, and commit the version, lockfile, and generated changes. Publish the checked commit with `npm publish --access public`, then verify the npm version and create its matching GitHub tag/release. The checks do not publish anything and must pass before publishing; `prepack` automatically builds but does not run the full test suite.
 

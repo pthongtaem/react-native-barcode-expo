@@ -12,3 +12,4 @@ declare class ErrorBoundary extends React.Component<{
     render(): string | number | bigint | boolean | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode>> | React.JSX.Element;
 }
 export default ErrorBoundary;
+//# sourceMappingURL=ErrorBoundary.d.ts.map

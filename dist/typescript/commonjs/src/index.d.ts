@@ -14,3 +14,4 @@ type BarcodeProps = {
 };
 declare const Barcode: ({ value, format, width, height, text, textSize, textColor, lineColor, background, onError, }: BarcodeProps) => React.JSX.Element;
 export default Barcode;
+//# sourceMappingURL=index.d.ts.map

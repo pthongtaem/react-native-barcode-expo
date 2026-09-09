@@ -9,10 +9,10 @@
   "license": "Apache-2.0",
   "source": "src/index.tsx",
   "main": "dist/index.cjs",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
+  "types": "dist/typescript/commonjs/src/index.d.ts",
+  "typings": "dist/typescript/commonjs/src/index.d.ts",
   "scripts": {
-    "build": "node scripts/clean-dist.cjs && microbundle --jsx React.createElement --no-compress && node scripts/prepare-dist.cjs",
+    "build": "node scripts/clean-dist.cjs && node scripts/prepare-dist.cjs && bob build",
     "lint": "eslint src test scripts example-expo",
     "typecheck": "tsc --noEmit",
     "prepack": "npm run build",
@@ -35,20 +35,20 @@
     "react-native-svg": ">=13.0.0 <16.0.0"
   },
   "devDependencies": {
-    "@types/react": "~19.2.0",
     "@eslint/js": "^9.39.0",
+    "@types/react": "~19.2.0",
     "eslint": "^9.39.0",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^15.15.0",
-    "microbundle": "^0.15.1",
     "react": "19.2.3",
     "react-native": "0.86.3",
+    "react-native-builder-bob": "^0.43.1",
+    "react-native-svg": "15.15.4",
     "typescript": "~5.9.2",
-    "typescript-eslint": "^8.70.0",
-    "react-native-svg": "15.15.4"
+    "typescript-eslint": "^8.70.0"
   },
   "packageManager": "yarn@1.22.19",
-  "module": "dist/index.esm.mjs",
+  "module": "dist/module/index.js",
   "react-native": "src/index.tsx",
   "files": [
     "dist",
@@ -57,5 +57,29 @@
   "homepage": "https://github.com/pthongtaem/react-native-barcode-expo#readme",
   "bugs": {
     "url": "https://github.com/pthongtaem/react-native-barcode-expo/issues"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "dist",
+    "targets": [
+      [
+        "commonjs",
+        {
+          "esm": true
+        }
+      ],
+      [
+        "module",
+        {
+          "esm": true
+        }
+      ],
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
   }
 }
