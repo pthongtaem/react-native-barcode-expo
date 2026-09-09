@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer, { act } from 'react-test-renderer';
+import renderer, { act, type ReactTestRenderer } from 'react-test-renderer';
 import { StyleSheet, Text } from 'react-native';
 import Barcode from 'react-native-barcode-expo';
 import { Path } from 'react-native-svg';
@@ -7,7 +7,7 @@ import { Path } from 'react-native-svg';
 import App from '../App';
 
 it('renders barcode bars and updates them when the button is pressed', async () => {
-  let tree;
+  let tree!: ReactTestRenderer;
   await act(async () => {
     tree = renderer.create(<App />);
   });
@@ -25,7 +25,7 @@ it('renders barcode bars and updates them when the button is pressed', async () 
 
 
 it('lets users change and reset the barcode label size', async () => {
-  let tree;
+  let tree!: ReactTestRenderer;
   await act(async () => {
     tree = renderer.create(<App />);
   });
@@ -47,7 +47,7 @@ it('lets users change and reset the barcode label size', async () => {
 });
 
 it('shows the EAN13 example and can return to CODE128', async () => {
-  let tree;
+  let tree!: ReactTestRenderer;
   await act(async () => { tree = renderer.create(<App />); });
   await act(async () => tree.root.findByProps({ title: 'Show EAN13' }).props.onPress());
   expect(tree.root.findByType(Barcode).props).toMatchObject({

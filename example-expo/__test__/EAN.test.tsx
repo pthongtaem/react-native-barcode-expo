@@ -1,7 +1,7 @@
 import React from 'react';
-import renderer, { act } from 'react-test-renderer';
+import renderer, { act, type ReactTestRenderer } from 'react-test-renderer';
 import Svg, { Path } from 'react-native-svg';
-import Barcode from 'react-native-barcode-expo';
+import Barcode, { type BarcodeFormat } from 'react-native-barcode-expo';
 
 // EAN-13 5901234123457: leading digit 5 selects LGGLLG parity.
 // Guards + left digits 901234 + center guard + right digits 123457.
@@ -11,7 +11,7 @@ const expectedEAN13 = [
 ].join('');
 
 it.each(['5901234123457', '590123412345'])('renders the correct EAN13 bars for %s', async value => {
-  let tree;
+  let tree!: ReactTestRenderer;
   await act(async () => {
     tree = renderer.create(<Barcode value={value} format="EAN13" />);
   });
@@ -32,9 +32,9 @@ it.each([
   ['EAN8', '96385074', 134],
   ['UPC', '036000291452', 190],
 ])('renders multi-part %s encodings', async (format, value, width) => {
-  let tree;
+  let tree!: ReactTestRenderer;
   await act(async () => {
-    tree = renderer.create(<Barcode value={value} format={format} />);
+    tree = renderer.create(<Barcode value={value} format={format as BarcodeFormat} />);
   });
   expect(tree.root.findByType(Svg).props.width).toBe(width);
   expect(tree.root.findByType(Path).props.d).toMatch(/^M/);
@@ -47,9 +47,9 @@ it.each([
   ['EAN-13', '5901234123457', 'Invalid barcode format.'],
 ])('reports invalid input for %s: %s', async (format, value, message) => {
   const onError = jest.fn();
-  let tree;
+  let tree!: ReactTestRenderer;
   await act(async () => {
-    tree = renderer.create(<Barcode value={value} format={format} onError={onError} />);
+    tree = renderer.create(<Barcode value={value} format={format as BarcodeFormat} onError={onError} />);
   });
   expect(onError).toHaveBeenCalledWith(new Error(message));
   expect(tree.root.findByType(Path).props.d).toBe('');

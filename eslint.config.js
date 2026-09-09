@@ -21,7 +21,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/**/*.{ts,tsx}', 'test/**/*.{ts,tsx}', 'example-expo/**/*.{js,jsx}'],
+    files: ['src/**/*.{ts,tsx}', 'test/**/*.{ts,tsx}', 'example-expo/**/*.{js,jsx,ts,tsx}'],
     ...react.configs.flat.recommended,
     settings: {
       react: {
@@ -36,7 +36,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['example-expo/**/*.{js,jsx}'],
+    files: ['example-expo/**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.jest,
