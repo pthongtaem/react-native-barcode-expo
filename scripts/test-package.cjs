@@ -66,6 +66,11 @@ try {
   fs.cpSync(path.join(example, '__test__'), path.join(temp, '__test__'), { recursive: true });
   fs.copyFileSync(path.join(example, 'App.js'), path.join(temp, 'App.js'));
   fs.copyFileSync(path.join(example, 'babel.config.js'), path.join(temp, 'babel.config.js'));
+  fs.writeFileSync(path.join(temp, '__test__/CommonJS.test.js'), `
+it('preserves the direct CommonJS component export', () => {
+  expect(typeof require(${JSON.stringify(path.join(installed, manifest.main))})).toBe('function');
+});
+`);
 
   const projects = ['main', 'module', 'react-native'].map(field => ({
     ...examplePkg.jest,

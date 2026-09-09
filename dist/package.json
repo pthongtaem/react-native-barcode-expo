@@ -18,6 +18,6 @@
     "react-native-svg": ">=13.0.0 <16.0.0"
   },
   "main": "index.cjs",
-  "module": "index.esm.mjs",
-  "types": "index.d.ts"
+  "module": "module/index.js",
+  "types": "typescript/commonjs/src/index.d.ts"
 }
