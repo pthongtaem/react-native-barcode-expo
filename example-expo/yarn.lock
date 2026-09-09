@@ -6516,15 +6516,15 @@ __metadata:
   linkType: hard
 
 "react-native-barcode-expo@file:../dist::locator=barcode-expo-example%40workspace%3A.":
-  version: 3.0.2
-  resolution: "react-native-barcode-expo@file:../dist#../dist::hash=683d6b&locator=barcode-expo-example%40workspace%3A."
+  version: 3.0.3
+  resolution: "react-native-barcode-expo@file:../dist#../dist::hash=e7a71f&locator=barcode-expo-example%40workspace%3A."
   dependencies:
     jsbarcode: "npm:^3.11.5"
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
     react-native: ">=0.69.0 <1.0.0"
     react-native-svg: ">=13.0.0 <16.0.0"
-  checksum: 10c0/0014f3d355be03cd3d3745b600b51320fa5b0c8c3341e3ac943111362581f4c86777eb040a243b1afd435c334b492abd58fae0b80d330f30dfed26af506c3823
+  checksum: 10c0/f140810f4727671193b2cf3afab8f7f23db2ee1ab4d3225458c1de9694196cd876a3dcc199c3061d8230feee6f9825947f7fb2eecb6c6c64e009347d165f21a3
   languageName: node
   linkType: hard
 
