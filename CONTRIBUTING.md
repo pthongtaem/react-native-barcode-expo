@@ -6,21 +6,25 @@ This guide covers local development, package checks, and releases. For installat
 
 The Expo example targets SDK 57.
 
-Use Node.js 22.13 or newer and Yarn 1.22.19. From the repository root:
+Use Node.js 22.13 or newer and Yarn 4.18.0. Both projects pin the same Yarn version, and the CLI is checked into `.yarn/releases`. Keep `nodeLinker: node-modules`; the example and package checks expect regular `node_modules` directories.
+
+Enable [Corepack](https://yarnpkg.com/corepack) if it is available in your Node installation, then verify `yarn --version` prints `4.18.0`. Without Corepack, invoke the checked-in CLI directly: `node .yarn/releases/yarn-4.18.0.cjs <command>` at the root, or `node ../.yarn/releases/yarn-4.18.0.cjs <command>` from `example-expo`.
+
+The root and example remain separate Yarn projects with separate committed lockfiles. From the repository root:
 
 ```sh
-yarn install
+yarn install --immutable
 yarn build
 yarn lint
 yarn typecheck
 cd example-expo
-yarn install
+yarn install --immutable
 npx expo install --check
 yarn test
 yarn start
 ```
 
-The example installs the package from the built `dist` directory (`file:../dist`). The build generates its package manifest so the example consumes the compiled library without copying the root development dependencies. After changing the library, rebuild it and run `yarn install --force` in the example to refresh the local package copy.
+The example installs the package from the built `dist` directory (`file:../dist`). The build generates its package manifest so the example consumes the compiled library without copying the root development dependencies. After changing the library, rebuild it and run `yarn add react-native-barcode-expo@file:../dist` in the example to refresh the local package copy. This recomputes the content hash stored in the example lockfile; commit that lockfile when the build changes. Use `yarn install --immutable` for reproducible installs after checkout. Yarn 4 does not support the old `yarn install --force` workflow, and plain `yarn up react-native-barcode-expo` can replace the local dependency with a registry version.
 
 ## Run on iOS Simulator
 
@@ -56,8 +60,8 @@ This runs lint, packs and installs the actual `.tgz` in a temporary consumer, ru
 
 Use `npm run test:package` to run only the package checks. The `prepack` lifecycle runs `npm run build` automatically before `npm pack` and `npm publish`, so packaging rebuilds `dist` from source. Build output remains committed to Git; review and commit any generated changes before releasing.
 
-Run `yarn audit` at the root to check the library's dependency lockfile, including build tools. The example has its own lockfile and can be audited separately from `example-expo`. An audit result reflects known advisories at the time of the check, not a guarantee of security.
+Run `yarn npm audit --recursive` at the root to check the library's dependency lockfile, including build tools. The example has its own lockfile and can be audited separately from `example-expo`. An audit result reflects known advisories at the time of the check, not a guarantee of security.
 
-For a release, update the version first, run `npm run release:check`, refresh the example's local package with `yarn install --force` in `example-expo`, and commit the version, lockfile, and generated changes. Publish the checked commit with `npm publish --access public`, then verify the npm version and create its matching GitHub tag/release. The checks do not publish anything and must pass before publishing; `prepack` automatically builds but does not run the full test suite.
+For a release, update the version first, run `npm run release:check`, refresh the example's local package with `yarn add react-native-barcode-expo@file:../dist` in `example-expo`, and commit the version, lockfile, and generated changes. Publish the checked commit with `npm publish --access public`, then verify the npm version and create its matching GitHub tag/release. The checks do not publish anything and must pass before publishing; `prepack` automatically builds but does not run the full test suite.
 
 Record the commands run, their results, and any platform testing limitations in the pull request. Summarize release-specific validation and upgrade notes in the GitHub release notes.

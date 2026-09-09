@@ -5,8 +5,13 @@ node_modules
 .rts2_cache_cjs
 .rts2_cache_es
 .rts2_cache_umd
-yarn.lock
 .vscode
 .idea
 .rts2*
 sizes.csv
+
+# Yarn generated state (keep the pinned release and lockfiles)
+**/.yarn/*
+!/.yarn/releases/
+!/.yarn/releases/**
+.pnp.*
