@@ -1,18 +1,12 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { useState } from 'react';
 import { AppRegistry, StyleSheet, Text, View, Button } from 'react-native';
 
-import Barcode from 'react-native-barcode-expo';
+import Barcode, { type BarcodeFormat } from 'react-native-barcode-expo';
 
 const Example = () => {
   const [code, setCode] = useState('Hello');
-  const [format, setFormat] = useState('CODE128');
-  const [textSize, setTextSize] = useState(undefined);
+  const [format, setFormat] = useState<BarcodeFormat>('CODE128');
+  const [textSize, setTextSize] = useState<number | undefined>(undefined);
 
   return (
     <View style={styles.container}>

@@ -18,15 +18,19 @@ On a fresh checkout, `dist` is absent. Install the root dependencies and build b
 yarn install --immutable
 yarn build
 yarn lint
-yarn typecheck
 cd example-expo
 yarn install --immutable
 npx expo install --check
 yarn test
+cd ..
+yarn typecheck
+cd example-expo
 yarn start
 ```
 
 The example installs the package from the built `dist` directory (`file:../dist`). The build generates its package manifest so the example consumes the compiled library without copying the root development dependencies. After changing the library, rebuild it and run `yarn add react-native-barcode-expo@file:../dist` in the example to refresh the local package copy. This recomputes the content hash stored in the example lockfile; commit that lockfile when the build changes. Build before installing the example in CI as well. Use `yarn install --immutable` for reproducible installs after checkout. Yarn 4 does not support the old `yarn install --force` workflow, and plain `yarn up react-native-barcode-expo` can replace the local dependency with a registry version.
+
+The library, example app, and Jest tests use TypeScript. `yarn typecheck` checks all three with strict mode enabled; Jest transforms the TSX tests with the Expo Babel preset. Package checks also typecheck the app and tests against the declarations in the installed npm archive.
 
 ## Run on iOS Simulator
 

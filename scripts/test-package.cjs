@@ -64,9 +64,9 @@ try {
     fs.symlinkSync(path.join(root, 'node_modules/@types/react'), path.join(modules, '@types/react'), 'junction');
   }
   fs.cpSync(path.join(example, '__test__'), path.join(temp, '__test__'), { recursive: true });
-  fs.copyFileSync(path.join(example, 'App.js'), path.join(temp, 'App.js'));
+  fs.copyFileSync(path.join(example, 'App.tsx'), path.join(temp, 'App.tsx'));
   fs.copyFileSync(path.join(example, 'babel.config.js'), path.join(temp, 'babel.config.js'));
-  fs.writeFileSync(path.join(temp, '__test__/CommonJS.test.js'), `
+  fs.writeFileSync(path.join(temp, '__test__/CommonJS.test.tsx'), `
 it('preserves the direct CommonJS component export', () => {
   expect(typeof require(${JSON.stringify(path.join(installed, manifest.main))})).toBe('function');
 });
@@ -76,7 +76,7 @@ it('preserves the direct CommonJS component export', () => {
     ...examplePkg.jest,
     rootDir: temp,
     displayName: field,
-    testMatch: ['<rootDir>/__test__/**/*.test.js'],
+    testMatch: ['<rootDir>/__test__/**/*.test.tsx'],
     transform: { '^.+\\.[cm]?[jt]sx?$': 'babel-jest' },
     moduleNameMapper: { '^react-native-barcode-expo$': path.join(installed, manifest[field]) },
   }));
@@ -90,8 +90,8 @@ it('preserves the direct CommonJS component export', () => {
   fs.writeFileSync(path.join(temp, 'types.tsx'), types);
   writeJSON(path.join(temp, 'tsconfig.json'), {
     compilerOptions: { jsx: 'react-native', moduleResolution: 'node', noEmit: true,
-      skipLibCheck: true, allowSyntheticDefaultImports: true, lib: ['dom', 'esnext'], types: ['react'] },
-    files: ['types.tsx'],
+      strict: true, skipLibCheck: true, allowSyntheticDefaultImports: true, lib: ['dom', 'esnext'], types: ['react', 'jest'] },
+    include: ['types.tsx', 'App.tsx', '__test__/**/*.tsx'],
   });
   run(process.execPath, [path.join(root, 'node_modules/typescript/bin/tsc'),
     '--project', path.join(temp, 'tsconfig.json')]);

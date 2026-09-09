@@ -14,7 +14,7 @@
   "scripts": {
     "build": "node scripts/clean-dist.cjs && node scripts/prepare-dist.cjs && bob build",
     "lint": "eslint src test scripts example-expo",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p example-expo/tsconfig.json",
     "prepack": "npm run build",
     "test:package": "node scripts/test-package.cjs",
     "release:check": "npm run lint && npm run test:package && npm run typecheck"
