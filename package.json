@@ -1,6 +1,6 @@
 {
   "name": "react-native-barcode-expo",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "React Native barcode component with Expo support, powered by JsBarcode and react-native-svg.",
   "repository": {
     "type": "git",
