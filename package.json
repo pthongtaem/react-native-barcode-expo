@@ -47,7 +47,7 @@
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.70.0"
   },
-  "packageManager": "yarn@1.22.19",
+  "packageManager": "yarn@4.18.0",
   "module": "dist/module/index.js",
   "react-native": "src/index.tsx",
   "files": [
