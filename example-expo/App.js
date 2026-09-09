@@ -16,7 +16,7 @@ const Example = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>React Native Barcode Builder</Text>
+      <Text style={styles.welcome}>React Native Barcode Expo</Text>
       <Barcode value={code} format={format} text={code} textSize={textSize} />
       <Button title="Press me" onPress={() => {
         setFormat('CODE128');
