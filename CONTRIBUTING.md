@@ -10,7 +10,7 @@ Use Node.js 22.13 or newer and Yarn 4.18.0. Both projects pin the same Yarn vers
 
 Enable [Corepack](https://yarnpkg.com/corepack) if it is available in your Node installation, then verify `yarn --version` prints `4.18.0`. Without Corepack, invoke the checked-in CLI directly: `node .yarn/releases/yarn-4.18.0.cjs <command>` at the root, or `node ../.yarn/releases/yarn-4.18.0.cjs <command>` from `example-expo`.
 
-The root and example remain separate Yarn projects with separate committed lockfiles. From the repository root:
+The root and example remain separate Yarn projects with separate committed lockfiles. The example overrides `xcode/uuid` to 11.1.1 to address GHSA-w5hq-g745-h8pq while retaining CommonJS support and the `uuid.v4()` API used by `xcode`. Reassess this override when `xcode` updates its dependency. From the repository root:
 
 ```sh
 yarn install --immutable
