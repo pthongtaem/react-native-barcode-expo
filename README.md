@@ -185,6 +185,20 @@ NODE_OPTIONS=--dns-result-order=ipv4first npx expo start --ios --localhost --por
 
 This command was used for the simulator test below. Stop Metro with Ctrl+C when finished, and quit Simulator separately.
 
+### Package and release checks
+
+Install the root and `example-expo` dependencies using the development steps above, then run from the repository root:
+
+```sh
+npm run release:check
+```
+
+This runs lint, packs and installs the actual `.tgz` in a temporary consumer, runs the existing barcode tests against its CommonJS, ESM, and React Native entry points, checks its published TypeScript declarations, and typechecks the repository. The temporary consumer reuses the example's installed peer dependencies and test tools; the library and its production dependencies are installed through npm. This is a package smoke test, not a native device test. Registry access is required, and temporary files are removed when the command finishes.
+
+Use `npm run test:package` to run only the package checks. The `prepack` lifecycle runs `npm run build` automatically before `npm pack` and `npm publish`, so packaging rebuilds `dist` from source. Build output remains committed to Git; review and commit any generated changes before releasing.
+
+For a release, update the version first, run `npm run release:check`, refresh the example's local package with `yarn install --force` in `example-expo`, and commit the version, lockfile, and generated changes. Publish the checked commit with `npm publish --access public`, then verify the npm version and create its matching GitHub tag/release. The checks do not publish anything and must pass before publishing; `prepack` automatically builds but does not run the full test suite.
+
 ### Verification
 
 Verified locally on September 8, 2026:
