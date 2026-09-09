@@ -1,6 +1,11 @@
 # react-native-barcode-expo
 
-React Native component to generate barcodes. Uses [JsBarcode](https://github.com/lindell/JsBarcode) for encoding of data.
+[![npm version](https://img.shields.io/npm/v/react-native-barcode-expo)](https://www.npmjs.com/package/react-native-barcode-expo)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](https://github.com/pthongtaem/react-native-barcode-expo/blob/master/LICENSE)
+
+Generate barcodes in React Native and Expo apps with TypeScript support. Encode formats such as CODE128, EAN-13, and UPC with [JsBarcode](https://github.com/lindell/JsBarcode), and render them with [react-native-svg](https://github.com/software-mansion/react-native-svg).
+
+Customize bar colors, dimensions, and text labels, with typed format names and validation errors you can handle in your app.
 
 ## Installation
 
@@ -23,7 +28,7 @@ import Barcode from 'react-native-barcode-expo';
 
 You can find more info about the supported barcodes in the [JsBarcode README](https://github.com/lindell/JsBarcode#supported-barcodes).
 
-![Barcode example running on iOS Simulator](https://raw.githubusercontent.com/pthongtaem/react-native-barcode-expo/master/images/example.jpg)
+<img src="https://raw.githubusercontent.com/pthongtaem/react-native-barcode-expo/master/images/example.jpg" alt="Barcode example running on iOS Simulator" width="300" />
 
 ## Properties
 
@@ -150,3 +155,10 @@ The example targets Expo SDK 57. iOS Simulator testing covers this SDK; Android 
 ## Contributing
 
 See the [contributor guide](https://github.com/pthongtaem/react-native-barcode-expo/blob/master/CONTRIBUTING.md) for local development, testing, and release instructions.
+
+
+## License and credits
+
+Licensed under the [Apache License 2.0](https://github.com/pthongtaem/react-native-barcode-expo/blob/master/LICENSE).
+
+Based on [react-native-barcode-builder](https://github.com/wonsikin/react-native-barcode-builder). Original copyright: 2017 Arthur Wang.
