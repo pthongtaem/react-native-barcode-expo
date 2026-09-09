@@ -23,7 +23,7 @@ import Barcode from 'react-native-barcode-expo';
 
 You can find more info about the supported barcodes in the [JsBarcode README](https://github.com/lindell/JsBarcode#supported-barcodes).
 
-![Barcode example](https://raw.githubusercontent.com/pthongtaem/react-native-barcode-expo/master/images/example.png)
+![Barcode example running on iOS Simulator](https://raw.githubusercontent.com/pthongtaem/react-native-barcode-expo/master/images/example.jpg)
 
 ## Properties
 
