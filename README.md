@@ -1,30 +1,19 @@
-
 # react-native-barcode-expo
 
 React Native component to generate barcodes. Uses [JsBarcode](https://github.com/lindell/JsBarcode) for encoding of data.
 
-## Getting started
+## Installation
 
-#### Step 1
-
-Install `react-native-barcode-expo`:
-
-    yarn add react-native-barcode-expo
-
-
-#### Step 2
-
-Install the native SVG dependency using the version selected by your Expo SDK:
+For Expo projects:
 
 ```sh
+npm install react-native-barcode-expo
 npx expo install react-native-svg
 ```
 
-For bare React Native, install `react-native-svg` and run `npx pod-install` for iOS.
+For bare React Native, install this package and a compatible `react-native-svg` version, run `npx pod-install` for iOS, and rebuild the native app.
 
-#### Step 3
-
-Start using the component
+## Usage
 
 ```javascript
 import Barcode from 'react-native-barcode-expo';
@@ -34,7 +23,7 @@ import Barcode from 'react-native-barcode-expo';
 
 You can find more info about the supported barcodes in the [JsBarcode README](https://github.com/lindell/JsBarcode#supported-barcodes).
 
-![](./images/example.png)
+![Barcode example](https://raw.githubusercontent.com/pthongtaem/react-native-barcode-expo/master/images/example.png)
 
 ## Properties
 
@@ -144,80 +133,20 @@ npx expo install --check
 
 For bare React Native, install a `react-native-svg` version compatible with your React Native version, run `npx pod-install` for iOS, and rebuild the native app. If you use an Expo development build, rebuild it after changing the native SVG dependency.
 
-The component import and props remain the same. Version 3 accepts React 18 or 19 and lets the app choose React Native and SVG versions within the declared peer ranges. The example and simulator verification below cover SDK 57; other SDK combinations have not been runtime-tested in this release.
+The default component import is unchanged. If you use TypeScript, update format variables to the `BarcodeFormat` type as described above.
 
+## Compatibility
 
-## Expo compatibility and local development
+React, React Native, and `react-native-svg` are peer dependencies supplied by your app:
 
-The example targets [Expo SDK 57](https://expo.dev/changelog/sdk-57), with React 19.2.3, React Native 0.86.3, and react-native-svg 15.15.4. React, React Native, and SVG are peer dependencies so the consuming app controls their versions. Always use `npx expo install react-native-svg` to select the native version compatible with your SDK; the peer range alone does not guarantee that every combination is compatible.
-
-Use Node.js 22.13 or newer and Yarn 1.22.19. From the repository root:
-
-```sh
-yarn install
-yarn lint
-yarn typecheck
-yarn build
-cd example-expo
-yarn install
-npx expo install --check
-yarn test
-yarn start
-```
-
-The example installs the package from the built `dist` directory (`file:../dist`). The build generates its package manifest so the example consumes the compiled library without copying the root development dependencies. After changing the library, rebuild it and run `yarn install --force` in the example to refresh the local package copy.
-
-### Run on iOS Simulator
-
-Install Xcode and an iOS Simulator runtime, then complete the build and installation steps above. From `example-expo`, run:
-
-```sh
-yarn ios
-```
-
-Allow Expo CLI to install or update Expo Go to the version recommended for SDK 57. When the app opens, it displays a barcode labeled `Hello`. Tap **Press me** to change both the barcode and its label to `World`. Tap **Show EAN13** to display `5901234123457`, or **Press me** to return to CODE128. Use **Text size 24**, **Text size 32**, and **Default text size** to resize the label and restore its original size. The bars stay unchanged when only the text size changes.
-
-If Expo Go reports **Could not connect to the server** when using localhost, Metro may be listening on IPv6 (`::1`) while Expo Go connects to IPv4 (`127.0.0.1`). Stop Metro with Ctrl+C and restart with:
-
-```sh
-NODE_OPTIONS=--dns-result-order=ipv4first npx expo start --ios --localhost --port 8081
-```
-
-This command was used for the simulator test below. Stop Metro with Ctrl+C when finished, and quit Simulator separately.
-
-### Package and release checks
-
-The library is built with React Native Builder Bob. `dist/commonjs` contains CommonJS output, `dist/module` contains ESM output, and `dist/typescript` contains declarations for both module systems. The small `dist/index.cjs` adapter preserves the existing direct `require('react-native-barcode-expo')` component export. Metro can still consume `src/index.tsx` through the `react-native` entry.
-
-Use the package name when importing; generated paths have changed from the old Microbundle layout. The unused UMD and separate modern bundles are no longer generated. `dist/package.json` is generated for the example's `file:../dist` dependency; npm releases are packed from the repository root.
-
-Install the root and `example-expo` dependencies using the development steps above, then run from the repository root:
-
-```sh
-npm run release:check
-```
-
-This runs lint, packs and installs the actual `.tgz` in a temporary consumer, runs the existing barcode tests against its CommonJS, ESM, and React Native entry points, checks its published TypeScript declarations, and typechecks the repository. The temporary consumer reuses the example's installed peer dependencies and test tools; the library and its production dependencies are installed through npm. This is a package smoke test, not a native device test. Registry access is required, and temporary files are removed when the command finishes.
-
-Use `npm run test:package` to run only the package checks. The `prepack` lifecycle runs `npm run build` automatically before `npm pack` and `npm publish`, so packaging rebuilds `dist` from source. Build output remains committed to Git; review and commit any generated changes before releasing.
-
-Run `yarn audit` at the root to check the library's dependency lockfile, including build tools. The example has its own lockfile and can be audited separately from `example-expo`. An audit result reflects known advisories at the time of the check, not a guarantee of security.
-
-For a release, update the version first, run `npm run release:check`, refresh the example's local package with `yarn install --force` in `example-expo`, and commit the version, lockfile, and generated changes. Publish the checked commit with `npm publish --access public`, then verify the npm version and create its matching GitHub tag/release. The checks do not publish anything and must pass before publishing; `prepack` automatically builds but does not run the full test suite.
-
-### Verification
-
-Verified locally on September 8, 2026:
-
-| Check | Result |
+| Dependency | Supported peer range |
 | --- | --- |
-| `yarn lint` | Passed: source, type fixtures, build scripts, and example app/tests |
-| `yarn typecheck` | Passed for source and built declarations |
-| `yarn build` | Passed |
-| `yarn test` in `example-expo` | Passed: 12 tests covering EAN13 binary output and checksum validation, EAN8/UPC rendering, format switching, barcode updates, and label sizing |
-| `npx expo install --check` | Dependencies matched SDK 57 |
-| `npx expo-doctor@latest` | 21/21 checks passed |
-| `npx expo export --platform all` | iOS, Android, and web bundles generated successfully |
-| iPhone 17 Simulator, iOS 26.4, Expo Go 57.0.9 | `Hello` rendered; text size changed Default → 24 → 32 → Default while the bars stayed unchanged; EAN13 `5901234123457` displayed and switched back to CODE128 with **Press me**; no runtime error observed |
+| React | 18 or 19 |
+| React Native | `>=0.69.0 <1.0.0` |
+| react-native-svg | `>=13.0.0 <16.0.0` |
 
-Android and web were verified by bundling only. Physical devices were not tested.
+The example targets Expo SDK 57. iOS Simulator testing covers this SDK; Android and web have been checked by bundling only. Other SDK combinations and physical devices have not been runtime-tested. Use `npx expo install react-native-svg` to select the version compatible with your Expo SDK; the peer ranges alone do not guarantee compatibility for every combination.
+
+## Contributing
+
+See the [contributor guide](https://github.com/pthongtaem/react-native-barcode-expo/blob/master/CONTRIBUTING.md) for local development, testing, and release instructions.
