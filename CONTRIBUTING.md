@@ -10,7 +10,9 @@ Use Node.js 22.13 or newer and Yarn 4.18.0. Both projects pin the same Yarn vers
 
 Enable [Corepack](https://yarnpkg.com/corepack) if it is available in your Node installation, then verify `yarn --version` prints `4.18.0`. Without Corepack, invoke the checked-in CLI directly: `node .yarn/releases/yarn-4.18.0.cjs <command>` at the root, or `node ../.yarn/releases/yarn-4.18.0.cjs <command>` from `example-expo`.
 
-The root and example remain separate Yarn projects with separate committed lockfiles. The example overrides `xcode/uuid` to 11.1.1 to address GHSA-w5hq-g745-h8pq while retaining CommonJS support and the `uuid.v4()` API used by `xcode`. Reassess this override when `xcode` updates its dependency. From the repository root:
+The root and example remain separate Yarn projects with separate committed lockfiles. The example overrides `xcode/uuid` to 11.1.1 to address GHSA-w5hq-g745-h8pq while retaining CommonJS support and the `uuid.v4()` API used by `xcode`. Reassess this override when `xcode` updates its dependency.
+
+On a fresh checkout, `dist` is absent. Install the root dependencies and build before installing the example or running typecheck. From the repository root:
 
 ```sh
 yarn install --immutable
@@ -24,7 +26,7 @@ yarn test
 yarn start
 ```
 
-The example installs the package from the built `dist` directory (`file:../dist`). The build generates its package manifest so the example consumes the compiled library without copying the root development dependencies. After changing the library, rebuild it and run `yarn add react-native-barcode-expo@file:../dist` in the example to refresh the local package copy. This recomputes the content hash stored in the example lockfile; commit that lockfile when the build changes. Use `yarn install --immutable` for reproducible installs after checkout. Yarn 4 does not support the old `yarn install --force` workflow, and plain `yarn up react-native-barcode-expo` can replace the local dependency with a registry version.
+The example installs the package from the built `dist` directory (`file:../dist`). The build generates its package manifest so the example consumes the compiled library without copying the root development dependencies. After changing the library, rebuild it and run `yarn add react-native-barcode-expo@file:../dist` in the example to refresh the local package copy. This recomputes the content hash stored in the example lockfile; commit that lockfile when the build changes. Build before installing the example in CI as well. Use `yarn install --immutable` for reproducible installs after checkout. Yarn 4 does not support the old `yarn install --force` workflow, and plain `yarn up react-native-barcode-expo` can replace the local dependency with a registry version.
 
 ## Run on iOS Simulator
 
@@ -58,10 +60,10 @@ npm run release:check
 
 This runs lint, packs and installs the actual `.tgz` in a temporary consumer, runs the existing barcode tests against its CommonJS, ESM, and React Native entry points, checks its published TypeScript declarations, and typechecks the repository. The temporary consumer reuses the example's installed peer dependencies and test tools; the library and its production dependencies are installed through npm. This is a package smoke test, not a native device test. Registry access is required, and temporary files are removed when the command finishes.
 
-Use `npm run test:package` to run only the package checks. The `prepack` lifecycle runs `npm run build` automatically before `npm pack` and `npm publish`, so packaging rebuilds `dist` from source. Build output remains committed to Git; review and commit any generated changes before releasing.
+Use `npm run test:package` to run only the package checks. The `prepack` lifecycle runs `npm run build` automatically before `npm pack` and `npm publish`, so packaging rebuilds `dist` from source. Build output is ignored by Git and generated locally. The root `package.json` explicitly includes `dist` in `files`, so the built JavaScript and declarations are included in npm packages. Do not use `--ignore-scripts` when packing or publishing from a clean checkout. GitHub source archives do not contain built entry points; use npm for a ready-to-use package, or follow the local build steps when working from source.
 
 Run `yarn npm audit --recursive` at the root to check the library's dependency lockfile, including build tools. The example has its own lockfile and can be audited separately from `example-expo`. An audit result reflects known advisories at the time of the check, not a guarantee of security.
 
-For a release, update the version first, run `npm run release:check`, refresh the example's local package with `yarn add react-native-barcode-expo@file:../dist` in `example-expo`, and commit the version, lockfile, and generated changes. Publish the checked commit with `npm publish --access public`, then verify the npm version and create its matching GitHub tag/release. The checks do not publish anything and must pass before publishing; `prepack` automatically builds but does not run the full test suite.
+For a release, update the version first, run `npm run release:check`, refresh the example's local package with `yarn add react-native-barcode-expo@file:../dist` in `example-expo`, and commit the version, source changes, and updated example lockfile. Do not commit `dist`. Publish the checked commit with `npm publish --access public`, then verify the npm version and create its matching GitHub tag/release. The checks do not publish anything and must pass before publishing; `prepack` automatically builds but does not run the full test suite.
 
 Record the commands run, their results, and any platform testing limitations in the pull request. Summarize release-specific validation and upgrade notes in the GitHub release notes.

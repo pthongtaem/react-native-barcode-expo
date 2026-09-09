@@ -15,3 +15,6 @@ sizes.csv
 !/.yarn/releases/
 !/.yarn/releases/**
 .pnp.*
+
+# Generated library output (included in npm packages via package.json files)
+/dist/
